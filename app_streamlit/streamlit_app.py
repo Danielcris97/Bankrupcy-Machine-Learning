@@ -9,14 +9,12 @@ from groq import Groq # Importar la librería Groq
 import requests # Importar la librería requests para hacer llamadas HTTP a Flask
 
 # --- 1. Constantes y Configuración de Rutas ---
-# Rutas a los directorios de modelos y reportes
 MODELS_DIR = os.path.join(os.path.dirname(__file__), '..', 'models')
 REPORTS_DIR = os.path.join(os.path.dirname(__file__), '..', 'reports')
 
-# URL de tu backend Flask para guardar datos
-# IMPORTANTE: Si despliegas Flask en un servidor diferente, esta URL deberá cambiar
-# Para Docker Compose, usa el nombre del servicio Flask: http://flask_backend:5000/save_company_data
-FLASK_BACKEND_SAVE_URL = "http://flask_backend:5000/save_company_data" 
+# Obtener el host de Flask de una variable de entorno, por defecto 'localhost' para desarrollo local
+FLASK_HOST = os.getenv("FLASK_HOST", "localhost") 
+FLASK_BACKEND_SAVE_URL = f"http://{FLASK_HOST}:5000/save_company_data" 
 
 # Características importantes para mostrar en el perfil del clúster
 DISPLAY_FEATURES_FOR_CLUSTERS = [
