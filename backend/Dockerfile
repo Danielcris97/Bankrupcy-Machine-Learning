@@ -5,11 +5,13 @@ FROM python:3.9-slim-buster
 WORKDIR /app
 
 # Copia los archivos de requisitos e instálalos
-COPY requirements.txt .
+# La ruta es relativa al contexto de construcción (la raíz del proyecto)
+COPY backend/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copia el resto de la aplicación Flask y la carpeta de credenciales
-COPY . .
+# La ruta es relativa al contexto de construcción
+COPY backend/ .
 
 # Expone el puerto por defecto de Flask
 EXPOSE 5000

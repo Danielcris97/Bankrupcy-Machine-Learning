@@ -9,11 +9,13 @@ from groq import Groq # Importar la librería Groq
 import requests # Importar la librería requests para hacer llamadas HTTP a Flask
 
 # --- 1. Constantes y Configuración de Rutas ---
+# Rutas a los directorios de modelos y reportes
 MODELS_DIR = os.path.join(os.path.dirname(__file__), '..', 'models')
 REPORTS_DIR = os.path.join(os.path.dirname(__file__), '..', 'reports')
 
-# Obtener el host de Flask de una variable de entorno, por defecto 'localhost' para desarrollo local
-FLASK_HOST = os.getenv("FLASK_HOST", "localhost") 
+# URL de tu backend Flask para guardar datos
+# Para Docker Compose, usa el nombre del servicio Flask: http://flask_backend:5000/save_company_data
+FLASK_HOST = os.getenv("FLASK_HOST", "localhost") # Permite correr localmente o en Docker
 FLASK_BACKEND_SAVE_URL = f"http://{FLASK_HOST}:5000/save_company_data" 
 
 # Características importantes para mostrar en el perfil del clúster
@@ -29,15 +31,16 @@ DISPLAY_FEATURES_FOR_CLUSTERS = [
     'retained_earnings_to_total_assets'
 ]
 
-# --- 2. Carga Segura de la Clave API de Groq ---
-# Accede a la clave API de Groq de forma segura usando st.secrets
-# Esto requiere un archivo .streamlit/secrets.toml con [groq] api_key = "tu_clave"
-try:
-    GROQ_API_KEY_VALUE = st.secrets["groq"]["api_key"]
-    client = Groq(api_key=GROQ_API_KEY_VALUE)
-except KeyError:
-    st.error("Error: La clave API de Groq no se encontró en st.secrets. Asegúrate de configurar .streamlit/secrets.toml.")
+# --- 2. Carga Segura de la Clave API de Groq desde variable de entorno ---
+# Accede a la clave API de Groq de forma segura usando os.getenv
+GROQ_API_KEY_VALUE = os.getenv("GROQ_API_KEY")
+
+if not GROQ_API_KEY_VALUE:
+    st.error("Error: La clave API de Groq no se encontró. Por favor, asegúrate de configurar la variable de entorno 'GROQ_API_KEY'.")
     st.stop()
+
+try:
+    client = Groq(api_key=GROQ_API_KEY_VALUE)
 except Exception as e:
     st.error(f"Error al inicializar Groq API. Detalles: {e}")
     st.stop()
@@ -161,7 +164,7 @@ def apply_full_preprocessing_pipeline(df_raw: pd.DataFrame, preprocessor_params:
 
 # --- 5. Lógica de la Aplicación (Predicción y Análisis) ---
 
-# Definición de los SYSTEM PROMPTS para la IA (tal como los enviaste)
+# Definición de los SYSTEM PROMPTS para la IA
 SYSTEM_PROMPT_INITIAL_ANALYSIS = "Eres un experto en finanzas, economía y negocios. Tu función es analizar información financiera y de mercado. Solo puedes responder a preguntas relacionadas con estos temas y analizar la información brindada."
 SYSTEM_PROMPT_CHAT = "Eres un experto en finanzas, economía y negocios. Tu función es analizar información financiera y de mercado. Solo puedes responder a preguntas relacionadas con estos temas.Puedes responder algunas preguntas sobre el proyecto ml, sobre el método de predicción y funcionalidad básica del modelo, no debes entrar en detalles técnicos de programación porque no es tu especialidad, los temas más especializados de programación se deben consultar al desarrollador. Si te preguntan sobre cualquier otro tema, debes responder: 'Lo siento, soy un experto en finanzas y no puedo ayudarte con ese tema. '"
 
@@ -452,7 +455,7 @@ if uploaded_file is not None:
                     else:
                         st.error(f"Error al guardar datos en la base de datos: {response.status_code} - {response.json().get('error', 'Error desconocido')}")
                 except requests.exceptions.ConnectionError:
-                    st.error("Error de conexión: Asegúrate de que el servidor Flask esté corriendo en la URL especificada (ej. http://flask_backend:5000).")
+                    st.error(f"Error de conexión: Asegúrate de que el servidor Flask esté corriendo en la URL especificada (ej. http://{FLASK_HOST}:5000).")
                 except Exception as e:
                     st.error(f"Ocurrió un error al enviar datos a Flask: {e}")
             else:
