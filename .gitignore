@@ -205,3 +205,22 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+# Python
+# (Contenido de la plantilla Python...)
+
+# --- Adiciones específicas para tu proyecto ---
+
+# Credenciales de Firebase (tu archivo JSON de service account)
+# Asegúrate de que el nombre del archivo sea exacto
+backend/credentials/machine-learning-empesas-firebase-adminsdk-fbsvc-f902914f59.json
+
+# Secretos de Streamlit
+.streamlit/
+
+# Si tienes otros archivos de datos grandes o modelos que no quieres subir
+# data/raw/
+# data/processed/
+# models/*.pkl # Si decides no versionar los modelos .pkl generados
+# reports/*.png # Si decides no versionar los gráficos generados
+# reports/*.json # Si decides no versionar los JSON de reportes generados

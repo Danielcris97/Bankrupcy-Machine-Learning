@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  # Servicio para la aplicación Streamlit (Frontend)
+  streamlit_app:
+    build:
+      context: . # El contexto de construcción es la raíz del proyecto
+      dockerfile: ./app_streamlit/Dockerfile # Ruta al Dockerfile de Streamlit
+    ports:
+      - "8501:8501" # Mapea el puerto 8501 del contenedor al puerto 8501 de tu máquina
+    volumes:
+      # Monta las carpetas de modelos y reportes como volúmenes
+      # Esto asegura que los modelos y reportes estén disponibles para Streamlit
+      - ./models:/app/models
+      - ./reports:/app/reports
+      # Monta la carpeta de la aplicación Streamlit para desarrollo (opcional, pero útil)
+      - ./app_streamlit:/app
+      # Monta la carpeta .streamlit para que la app pueda leer secrets.toml
+      - ./.streamlit:/app/.streamlit
+    depends_on:
+      - flask_backend # Streamlit depende de que Flask esté corriendo
+    networks:
+      - app_network # Ambas aplicaciones en la misma red
+
+  # Servicio para el backend Flask
+  flask_backend:
+    build:
+      context: . # El contexto de construcción es la raíz del proyecto
+      dockerfile: ./backend/Dockerfile # Ruta al Dockerfile de Flask
+    ports:
+      - "5000:5000" # Mapea el puerto 5000 del contenedor al puerto 5000 de tu máquina
+    volumes:
+      # Monta la carpeta del backend para desarrollo
+      - ./backend:/app
+      # Monta la carpeta de credenciales para que Flask pueda acceder a ella
+      - ./backend/credentials:/app/credentials
+    environment:
+      FLASK_APP: app.py # Especifica el archivo principal de Flask
+      FLASK_ENV: development # Modo desarrollo para Flask
+    networks:
+      - app_network # Ambas aplicaciones en la misma red
+
+# Define la red para que los servicios puedan comunicarse entre sí
+networks:
+  app_network:
+    driver: bridge
