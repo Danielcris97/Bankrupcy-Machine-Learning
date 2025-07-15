@@ -3,14 +3,35 @@ from flask import Flask, request, jsonify
 import firebase_admin
 from firebase_admin import credentials, firestore
 import os
+import json # Importar json para la depuración
 
 app = Flask(__name__)
 
 # --- Configuración de Firebase ---
 # Ruta al archivo de credenciales de Firebase Admin SDK
 # Asegúrate de que este archivo JSON está en backend/credentials/
+# Verifica que 'machine-learning-empesas-firebase-adminsdk-fbsvc-f902914f59.json' es el nombre EXACTO
 CREDENTIALS_PATH = os.path.join(os.path.dirname(__file__), 'credentials', 'machine-learning-empesas-firebase-adminsdk-fbsvc-f902914f59.json')
  
+# --- DEPURACIÓN: Añadir estas líneas ---
+print(f"DEBUG: Intentando cargar credenciales desde: {CREDENTIALS_PATH}")
+if os.path.exists(CREDENTIALS_PATH):
+    print(f"DEBUG: El archivo de credenciales EXISTE en la ruta especificada.")
+    try:
+        with open(CREDENTIALS_PATH, 'r') as f:
+            content = f.read(100) # Leer solo los primeros 100 caracteres para no exponer el secreto
+        print(f"DEBUG: Contenido inicial del archivo: {content}...")
+        # Intenta parsear el JSON para ver si es válido
+        json.loads(content + '{}') # Agrega '}' para hacer un JSON válido si solo leíste el inicio
+        print("DEBUG: El archivo parece ser un JSON válido.")
+    except json.JSONDecodeError:
+        print("DEBUG: ADVERTENCIA: El archivo NO es un JSON válido o está incompleto.")
+    except Exception as file_read_e:
+        print(f"DEBUG: Error al leer/inspeccionar el archivo: {file_read_e}")
+else:
+    print(f"DEBUG: ERROR: El archivo de credenciales NO EXISTE en la ruta: {CREDENTIALS_PATH}")
+# --- FIN DE DEPURACIÓN ---
+
 # Inicializar la app de Firebase
 try:
     cred = credentials.Certificate(CREDENTIALS_PATH)
@@ -44,15 +65,6 @@ def save_company_data():
         return jsonify({"error": "No data provided"}), 400
 
     try:
-        # Puedes usar un campo único como ID del documento, o dejar que Firestore genere uno.
-        # Si la empresa tiene un ID único (ej. CIF/NIF), podrías usarlo:
-        # doc_id = company_data.get('cif_nif_column_name') # Asegúrate de que exista y sea único
-        # if doc_id:
-        #     doc_ref = db.collection('companies_analyzed').document(doc_id)
-        # else:
-        #     doc_ref = db.collection('companies_analyzed').document() # Firestore genera ID
-
-        # Para simplicidad y si no hay un ID único garantizado, deja que Firestore genere el ID
         doc_ref = db.collection('companies_analyzed').document()
         doc_ref.set(company_data) # Guarda el diccionario directamente como un documento
 
@@ -64,6 +76,4 @@ def save_company_data():
         return jsonify({"error": f"Failed to save data: {e}"}), 500
 
 if __name__ == '__main__':
-    # Ejecutar Flask en un puerto diferente al de Streamlit (ej. 5000)
-    # y accesible desde cualquier IP para que Streamlit pueda conectarse.
     app.run(debug=True, host='0.0.0.0', port=5000)

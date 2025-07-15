@@ -1,3 +1,4 @@
+# app_streamlit/app.py
 import streamlit as st
 import pandas as pd
 import numpy as np
@@ -14,9 +15,9 @@ MODELS_DIR = os.path.join(os.path.dirname(__file__), '..', 'models')
 REPORTS_DIR = os.path.join(os.path.dirname(__file__), '..', 'reports')
 
 # URL de tu backend Flask para guardar datos
-# Para Docker Compose, usa el nombre del servicio Flask: http://flask_backend:5000/save_company_data
-FLASK_HOST = os.getenv("FLASK_HOST", "localhost") # Permite correr localmente o en Docker
-FLASK_BACKEND_SAVE_URL = f"http://{FLASK_HOST}:5000/save_company_data" 
+# Para Docker Compose, usa el nombre del servicio Flask: http://flask_backend:5000
+FLASK_URL = os.getenv("FLASK_URL", "http://localhost:5000")  # En local usará localhost
+FLASK_BACKEND_SAVE_URL = f"{FLASK_URL}/save_company_data"
 
 # Características importantes para mostrar en el perfil del clúster
 DISPLAY_FEATURES_FOR_CLUSTERS = [
@@ -455,7 +456,8 @@ if uploaded_file is not None:
                     else:
                         st.error(f"Error al guardar datos en la base de datos: {response.status_code} - {response.json().get('error', 'Error desconocido')}")
                 except requests.exceptions.ConnectionError:
-                    st.error(f"Error de conexión: Asegúrate de que el servidor Flask esté corriendo en la URL especificada (ej. http://{FLASK_HOST}:5000).")
+                    # CORREGIDO: Usar FLASK_BACKEND_SAVE_URL directamente en el mensaje
+                    st.error(f"Error de conexión: Asegúrate de que el servidor Flask esté corriendo en la URL especificada (ej. {FLASK_BACKEND_SAVE_URL}).")
                 except Exception as e:
                     st.error(f"Ocurrió un error al enviar datos a Flask: {e}")
             else:
