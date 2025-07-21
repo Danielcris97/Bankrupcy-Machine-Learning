@@ -125,12 +125,7 @@ python src/model_evaluation.py
 
 
 ejecutar el streamlit app de manera local o pedir el enlace web a la aplicación desplegada en línea.
-
-🔍 **Conclusiones y Recomendaciones**                                                                                                                                                                               
-✅ El modelo RandomForest (Class Weighted) ofrece la mejor capacidad de detección temprana de quiebras (66% de recall).                                                                                             
-✅ Se acepta un mayor número de falsas alarmas para evitar no detectar quiebras reales.                                                                                                                             
-✅ El análisis de clústeres añade un contexto extra identificando perfiles de riesgo latente.
-                                                                                                                                                                                                            
+                                                                                                           
 
 ## Recomendaciones:
 Implementar un sistema automatizado de alertas para clientes o proveedores en riesgo.
