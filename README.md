@@ -19,7 +19,7 @@ Las quiebras generan:
 
 ## 🎯 La Solución: Radar Financiero Impulsado por IA
 
-Hemos desarrollado un sistema integral que permite:
+Hemos desarrollado un sistema integral que permite:                                                                                                                                                                 
 ✔️ **Predecir la Probabilidad de Quiebra** (clasificación binaria: quiebra / no quiebra).  
 ✔️ **Asignar un Perfil de Riesgo** mediante análisis de clústeres.  
 ✔️ **Visualizar los resultados** en una aplicación interactiva para usuarios no técnicos.                                                                                                                           
