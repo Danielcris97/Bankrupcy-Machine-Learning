@@ -23,7 +23,7 @@ Hemos desarrollado un sistema integral que permite:
 ✔️ **Predecir la Probabilidad de Quiebra** (clasificación binaria: quiebra / no quiebra).  
 ✔️ **Asignar un Perfil de Riesgo** mediante análisis de clústeres.  
 ✔️ **Visualizar los resultados** en una aplicación interactiva para usuarios no técnicos.                                                                                                                           
-✔️ **Análisis Finnanciero realizado por IA**                                                                                                                                                                        
+✔️ **Análisis Financiero realizado por IA**                                                                                                                                                                        
 ✔️ **Chatbot de un agente IA ser experto en finanzas**                                                                                                                                                              
 ✔️ **Base de datos NoSQL (Firebase de Google) para análisis de datos y reentrenamiento**                                                                                                                            
 
