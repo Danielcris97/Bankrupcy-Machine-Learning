@@ -24,7 +24,7 @@ Hemos desarrollado un sistema integral que permite:
 ✔️ **Asignar un Perfil de Riesgo** mediante análisis de clústeres.  
 ✔️ **Visualizar los resultados** en una aplicación interactiva para usuarios no técnicos.                                                                                                                           
 ✔️ **Análisis Finnanciero realizado por IA**                                                                                                                                                                        
-✔️ **Chatbot de un agente IA ser experto en finanzas**                                                                                                                            
+✔️ **Chatbot de un agente IA ser experto en finanzas**                                                                                                                                                              ✔️ **Base de datos NoSQL (Firebase de Google) para análisis de datos y reentrenamiento**                                                                                                                            
 
 👥 Beneficiarios:
 - 🏦 Bancos y Entidades Financieras.
@@ -60,7 +60,7 @@ Hemos desarrollado un sistema integral que permite:
   - 🟡 Clúster 2: Riesgo Moderado (4.5% quiebra).
   - 🔴 Clúster 1: Riesgo Extremo (75% quiebra, aunque con muy pocos casos).
 
-### 4️⃣ Despliegue (Streamlit App)
+### 4️⃣ Despliegue (Streamlit App, imagen alocada en render)
 - Subida de archivos CSV.
 - Predicción binaria + probabilidad de quiebra.
 - Asignación de clúster de riesgo.
@@ -123,7 +123,7 @@ python src/model_evaluation.py
 ### 3️⃣ Lanzar la aplicación:
 
 
-streamlit run app_streamlit/app.py
+ejecutar el streamlit app de manera local o pedir el enlace web a la aplicación desplegada en línea.                                                                                                                
 🔍 Conclusiones y Recomendaciones
 ✅ El modelo RandomForest (Class Weighted) ofrece la mejor capacidad de detección temprana de quiebras (66% de recall).
 ✅ Se acepta un mayor número de falsas alarmas para evitar no detectar quiebras reales.
